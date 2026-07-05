@@ -1,0 +1,16 @@
+{
+  "appId": "com.capmaster2023.footballempire",
+  "appName": "Football Empire",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "ScreenOrientation": {
+      "orientation": "landscape"
+    }
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

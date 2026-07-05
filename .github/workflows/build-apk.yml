@@ -1,0 +1,55 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Add Android platform
+        run: npx cap add android
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Enable immersive fullscreen
+        run: python3 scripts/patch-immersive.py
+
+      - name: Lock orientation to landscape
+        run: |
+          M=android/app/src/main/AndroidManifest.xml
+          if grep -q 'android:screenOrientation' "$M"; then
+            sed -i 's/android:screenOrientation="[^"]*"/android:screenOrientation="sensorLandscape"/' "$M"
+          else
+            sed -i 's/<activity/<activity android:screenOrientation="sensorLandscape"/' "$M"
+          fi
+          grep -n 'screenOrientation' "$M"
+
+      - name: Build debug APK
+        run: cd android && chmod +x gradlew && ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: football-empire-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk

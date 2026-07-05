@@ -1,0 +1,16 @@
+{
+  "name": "football-empire",
+  "version": "1.4.0",
+  "description": "Football Empire: World Simulation - transferts avec délais, Coach vs Président, académie recrutée et promotions jeunes",
+  "scripts": {
+    "build": "echo 'www/ est deja pret'"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "jsdom": "^29.1.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  }
+}
